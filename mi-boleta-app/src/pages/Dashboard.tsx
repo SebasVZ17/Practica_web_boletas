@@ -28,33 +28,44 @@ export default function Dashboard() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [stats, setStats] = useState<Stats>({ total: 0, pendientes: 0, ganados: 0, perdidos: 0 });
   const [loading, setLoading] = useState(true);
+  const [upcoming, setUpcoming] = useState<Ticket[]>([]);
 
   useEffect(() => {
     fetchTickets();
   }, []);
 
-  const fetchTickets = async () => {
-  try {
-    const res = await api.get('/tickets?pageSize=5');
-    const data: Ticket[] = res.data.data;
-    const total = res.data.meta.total;
-
-    const statsRes = await api.get('/tickets?pageSize=1000');
-    const allTickets: Ticket[] = statsRes.data.data;
-
-    setTickets(data);
-    setStats({
-      total,
-      pendientes: allTickets.filter(t => t.status === 'Pendiente').length,
-      ganados: allTickets.filter(t => t.status === 'Ganado').length,
-      perdidos: allTickets.filter(t => t.status === 'Perdido').length,
+  const getUpcomingTickets = (tickets: Ticket[]) => {
+    const now = new Date();
+    const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+    return tickets.filter(t => {
+      const date = new Date(t.gameDate);
+      return t.status === 'Pendiente' && date >= now && date <= threeDaysFromNow;
     });
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
+
+  const fetchTickets = async () => {
+    try {
+      const res = await api.get('/tickets?pageSize=5');
+      const data: Ticket[] = res.data.data;
+      const total = res.data.meta.total;
+
+      const statsRes = await api.get('/tickets?pageSize=1000');
+      const allTickets: Ticket[] = statsRes.data.data;
+
+      setTickets(data);
+      setUpcoming(getUpcomingTickets(allTickets));
+      setStats({
+        total,
+        pendientes: allTickets.filter(t => t.status === 'Pendiente').length,
+        ganados: allTickets.filter(t => t.status === 'Ganado').length,
+        perdidos: allTickets.filter(t => t.status === 'Perdido').length,
+      });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -83,8 +94,8 @@ export default function Dashboard() {
           <span className={`${styles.navItem} ${styles.navActive}`}>Dashboard</span>
           <Link to="/tickets" className={styles.navItem}>Mis boletas</Link>
           {user?.role === 'admin' && (
-          <Link to="/admin" className={styles.navItem}>Panel admin</Link>
-        )}
+            <Link to="/admin" className={styles.navItem}>Panel admin</Link>
+          )}
         </nav>
         <div className={styles.sidebarFooter}>
           <p className={styles.userName}>{user?.name}</p>
@@ -101,6 +112,18 @@ export default function Dashboard() {
           </div>
           <Link to="/tickets" className={styles.newBtn}>+ Nueva boleta</Link>
         </div>
+
+        {upcoming.length > 0 && (
+          <div className={styles.notification}>
+            <span className={styles.notificationIcon}>🔔</span>
+            <div>
+              <p className={styles.notificationTitle}>Sorteos próximos</p>
+              <p className={styles.notificationText}>
+                {upcoming.map(t => `${t.title} (${formatDate(t.gameDate)})`).join(', ')}
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className={styles.statsGrid}>
           <div className={styles.statCard}>

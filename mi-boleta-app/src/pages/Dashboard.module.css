@@ -278,3 +278,31 @@
   .main { padding: 24px 16px; }
   .statsGrid { grid-template-columns: repeat(2, 1fr); }
 }
+
+.notification {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+}
+
+.notificationIcon {
+  font-size: 20px;
+}
+
+.notificationTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #F59E0B;
+  margin-bottom: 4px;
+}
+
+.notificationText {
+  font-size: 13px;
+  color: #94A3B8;
+  line-height: 1.5;
+}
