@@ -147,6 +147,23 @@ export default function Tickets() {
     });
   };
 
+  const getCountdown = (dateStr: string) => {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const diff = date.getTime() - now.getTime();
+  
+  if (diff < 0) return null;
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  
+  if (days === 0 && hours === 0) return 'Hoy es el sorteo';
+  if (days === 0) return `Hoy en ${hours}h`;
+  if (days === 1) return 'Mañana';
+  if (days <= 7) return `En ${days} días`;
+  return null;
+};
+
   const statusColor = (status: string) => {
     if (status === 'Ganado') return styles.statusGanado;
     if (status === 'Perdido') return styles.statusPerdido;
@@ -219,10 +236,13 @@ export default function Tickets() {
                   {ticket.notes && <span className={styles.ticketNotes}>{ticket.notes}</span>}
                 </div>
                 <div className={styles.ticketRight}>
+                  {ticket.status === 'Pendiente' && getCountdown(ticket.gameDate) && (
+                    <span className={styles.countdown}>{getCountdown(ticket.gameDate)}</span>
+                )}
                   <span className={`${styles.status} ${statusColor(ticket.status)}`}>{ticket.status}</span>
                   {ticket.amount && (
                     <span className={styles.amount}>${Number(ticket.amount).toLocaleString('es-CO')}</span>
-                  )}
+                )}
                   <div className={styles.actions}>
                     <button className={styles.editBtn} onClick={() => openEdit(ticket)}>Editar</button>
                     <button className={styles.deleteBtn} onClick={() => handleDelete(ticket.id)}>Eliminar</button>

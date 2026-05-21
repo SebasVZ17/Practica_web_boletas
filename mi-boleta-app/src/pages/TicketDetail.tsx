@@ -51,6 +51,23 @@ export default function TicketDetail() {
     });
   };
 
+  const getCountdown = (dateStr: string) => {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const diff = date.getTime() - now.getTime();
+  
+  if (diff < 0) return null;
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  
+  if (days === 0 && hours === 0) return 'Hoy es el sorteo';
+  if (days === 0) return `Hoy en ${hours}h`;
+  if (days === 1) return 'Mañana';
+  if (days <= 7) return `En ${days} días`;
+  return null;
+};
+
   const statusColor = () => {
     if (ticket?.status === 'Ganado') return styles.statusGanado;
     if (ticket?.status === 'Perdido') return styles.statusPerdido;
@@ -91,6 +108,9 @@ export default function TicketDetail() {
                 <p className={styles.subtitle}>{ticket.gameType} · {formatDate(ticket.gameDate)}</p>
               </div>
               <span className={`${styles.status} ${statusColor()}`}>{ticket.status}</span>
+              {ticket.status === 'Pendiente' && getCountdown(ticket.gameDate) && (
+              <span className={styles.countdown}>{getCountdown(ticket.gameDate)}</span>
+              )}
             </div>
 
             <div className={styles.grid}>

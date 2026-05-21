@@ -115,7 +115,7 @@ export default function Dashboard() {
 
         {upcoming.length > 0 && (
           <div className={styles.notification}>
-            <span className={styles.notificationIcon}>🔔</span>
+            <span className={styles.notificationIcon}></span>
             <div>
               <p className={styles.notificationTitle}>Sorteos próximos</p>
               <p className={styles.notificationText}>

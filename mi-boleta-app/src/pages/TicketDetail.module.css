@@ -224,3 +224,13 @@
   .main { padding: 24px 16px; }
   .grid { grid-template-columns: 1fr; }
 }
+
+.countdown {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(6,182,212,0.1);
+  color: #06B6D4;
+  white-space: nowrap;
+}

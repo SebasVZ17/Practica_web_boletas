@@ -465,3 +465,13 @@
   font-size: 14px;
   color: #94A3B8;
 }
+
+.countdown {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(6,182,212,0.1);
+  color: #06B6D4;
+  white-space: nowrap;
+}
