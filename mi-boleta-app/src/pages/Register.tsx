@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import styles from './Register.module.css';
@@ -10,15 +9,31 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(''), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    if (loading) return;
     setLoading(true);
     try {
       await api.post('/auth/register', form);
       navigate('/login');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Error al registrarse');
+      const status = err.response?.status;
+      const message = err.response?.data?.error || err.response?.data?.message || '';
+
+      if (status === 409 || message.toLowerCase().includes('existe') || message.toLowerCase().includes('registrado')) {
+        setError('Este email ya está registrado.');
+      } else if (message.toLowerCase().includes('contraseña') || message.toLowerCase().includes('password')) {
+        setError('La contraseña debe tener mínimo 8 caracteres.');
+      } else {
+        setError(message || 'Error al registrarse');
+      }
     } finally {
       setLoading(false);
     }
