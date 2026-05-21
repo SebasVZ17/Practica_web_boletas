@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import styles from './Tickets.module.css';
 
+
 interface Ticket {
   id: string;
   title: string;
@@ -296,6 +297,7 @@ export default function Tickets() {
                     value={form.gameDate}
                     onChange={e => setForm({ ...form, gameDate: e.target.value })}
                     required
+                    min={new Date().toISOString().slice(0, 16)}
                   />
                 </div>
                 <div className={styles.field}>

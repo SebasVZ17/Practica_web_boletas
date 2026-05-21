@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
@@ -11,21 +11,36 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(''), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  const handleSubmit = async () => {
+    if (loading) return;
     setLoading(true);
     try {
       const res = await api.post('/auth/login', form);
       login(res.data.data.token, res.data.data.user);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Error al iniciar sesión');
+      const status = err.response?.status;
+      const message = err.response?.data?.error || err.response?.data?.message || '';
+
+      if (status === 401 || message.toLowerCase().includes('contraseña') || message.toLowerCase().includes('password')) {
+        setError('Contraseña incorrecta.');
+      } else if (status === 404 || message.toLowerCase().includes('no encontrado')) {
+        setError('No existe una cuenta con ese email.');
+      } else {
+        setError(message || 'Error al iniciar sesión');
+      }
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className={styles.root}>
       <div className={styles.left}>
@@ -49,7 +64,7 @@ export default function Login() {
 
           {error && <div className={styles.errorBox}>{error}</div>}
 
-          <form onSubmit={handleSubmit}>
+          <div>
             <div className={styles.field}>
               <label>Email</label>
               <input
@@ -57,7 +72,6 @@ export default function Login() {
                 placeholder="tu@email.com"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                required
               />
             </div>
             <div className={styles.field}>
@@ -67,13 +81,17 @@ export default function Login() {
                 placeholder="••••••••"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                required
               />
             </div>
-            <button className={styles.button} type="submit" disabled={loading}>
+            <button
+              className={styles.button}
+              type="button"
+              disabled={loading}
+              onClick={handleSubmit}
+            >
               {loading ? 'Ingresando...' : 'Iniciar sesión'}
             </button>
-          </form>
+          </div>
 
           <p className={styles.footer}>
             ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
