@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+.root {
+  min-height: 100vh;
+  background-color: #0F172A;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.sidebar {
+  background: #1E293B;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(248,250,252,0.06);
+}
+
+.brand { margin-bottom: 48px; }
+
+.brandName {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #F8FAFC;
+  letter-spacing: -0.5px;
+}
+
+.brandDot { color: #7C3AED; }
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.navItem {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #94A3B8;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.navItem:hover {
+  background: rgba(248,250,252,0.05);
+  color: #F8FAFC;
+}
+
+.navActive {
+  background: rgba(124,58,237,0.15);
+  color: #7C3AED;
+}
+
+.sidebarFooter {
+  border-top: 1px solid rgba(248,250,252,0.06);
+  padding-top: 20px;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #F8FAFC;
+  margin-bottom: 2px;
+}
+
+.userEmail {
+  font-size: 12px;
+  color: #94A3B8;
+  margin-bottom: 12px;
+}
+
+.logoutBtn {
+  background: none;
+  border: 1px solid rgba(248,250,252,0.1);
+  color: #94A3B8;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.logoutBtn:hover {
+  border-color: #7C3AED;
+  color: #7C3AED;
+}
+
+.main {
+  padding: 40px 48px;
+  overflow-y: auto;
+}
+
+.backRow {
+  margin-bottom: 28px;
+}
+
+.backBtn {
+  font-size: 14px;
+  color: #94A3B8;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.backBtn:hover { color: #F8FAFC; }
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #F8FAFC;
+  letter-spacing: -1px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #94A3B8;
+}
+
+.status {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.statusPendiente { background: rgba(245,158,11,0.1); color: #F59E0B; }
+.statusGanado { background: rgba(34,197,94,0.1); color: #22C55E; }
+.statusPerdido { background: rgba(248,113,113,0.1); color: #f87171; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: #1E293B;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid rgba(248,250,252,0.06);
+}
+
+.cardLabel {
+  font-size: 12px;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 500;
+}
+
+.cardValue {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #F8FAFC;
+  letter-spacing: -0.5px;
+}
+
+.notesCard {
+  background: #1E293B;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid rgba(248,250,252,0.06);
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notesText {
+  font-size: 15px;
+  color: #F8FAFC;
+  line-height: 1.6;
+}
+
+.footerActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.editBtn {
+  background: #7C3AED;
+  color: #F8FAFC;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.editBtn:hover { background: #6d28d9; }
+
+.empty {
+  font-size: 14px;
+  color: #94A3B8;
+  text-align: center;
+  padding: 48px 0;
+}
+
+@media (max-width: 768px) {
+  .root { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .main { padding: 24px 16px; }
+  .grid { grid-template-columns: 1fr; }
+}
