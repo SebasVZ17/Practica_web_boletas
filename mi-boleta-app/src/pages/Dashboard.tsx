@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import styles from './Dashboard.module.css';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 interface Ticket {
   id: string;
@@ -84,6 +85,14 @@ export default function Dashboard() {
     return styles.statusPendiente;
   };
 
+  const chartData = [
+    { name: 'Pendientes', value: stats.pendientes },
+    { name: 'Ganadas', value: stats.ganados },
+    { name: 'Perdidas', value: stats.perdidos },
+  ];
+
+  const COLORS = ['#F59E0B', '#22C55E', '#f87171'];
+
   return (
     <div className={styles.root}>
       <aside className={styles.sidebar}>
@@ -143,6 +152,40 @@ export default function Dashboard() {
             <span className={`${styles.statValue} ${styles.colorPerdido}`}>{String(stats.perdidos)}</span>
           </div>
         </div>
+
+        {(stats.pendientes > 0 || stats.ganados > 0 || stats.perdidos > 0) && (
+          <div className={styles.chartSection}>
+            <h2 className={styles.sectionTitle}>Distribución de boletas</h2>
+            <ResponsiveContainer width="100%" height={280}>
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={70}
+                  outerRadius={110}
+                  paddingAngle={3}
+                  dataKey="value"
+                >
+                  {chartData.map((_, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    background: '#1E293B',
+                    border: '1px solid rgba(248,250,252,0.08)',
+                    borderRadius: '8px',
+                    color: '#F8FAFC',
+                  }}
+                />
+                <Legend
+                  formatter={(value) => <span style={{ color: '#94A3B8', fontSize: '13px' }}>{value}</span>}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        )}
 
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
